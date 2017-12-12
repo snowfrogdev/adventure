@@ -1,13 +1,14 @@
-let Test: any = pc.createScript('test');
+// !!!REQUIRED IMPORTS!!!
 
-Test.attributes.add('message', {
-    type: 'string'
-});
 
-Test.extend({
-    initialize: function() {
-        const self = this;
-                
-        console.log(self.message)
-    }
-});
+/**********************************************/
+/* Useful PlayCanvas polyfills and extensions */
+/**********************************************/
+
+
+
+
+/**********************************************/
+/* Your code                                  */
+/**********************************************/
+import './example'
