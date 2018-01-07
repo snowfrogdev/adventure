@@ -24,6 +24,7 @@
     "homepage": "https://github.com/Neoflash1979/typescript-playcanvas-template#readme",
     "devDependencies": {
         "@types/node": "^8.0.56",
+        "@types/playcanvas": "0.0.0",
         "cross-env": "^5.1.1",
         "playcanvas-webpack-plugin": "^1.0.8",
         "ts-loader": "^3.2.0",
