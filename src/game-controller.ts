@@ -1,5 +1,7 @@
+import { rooms } from './rooms/rooms';
 import { createScript, ScriptTypeBase } from "../lib/create-script-decorator";
 import { Room } from "./room";
+import { centerRoom } from "./rooms/center-room";
 
 const nlp = require('compromise');
 
@@ -8,10 +10,17 @@ class GameController extends ScriptTypeBase implements ScriptType {
     name = 'gameController';
 
     currentRoom: Room;
+    rooms = rooms;
 
     initialize() {
+        this.currentRoom = centerRoom;
+        
         this.app.on('textInput:enter', this.onInput, this);
 
+    }
+
+    postInitialize() {
+        this.app.fire('gameController:textOutput', this.currentRoom.arrive);
     }
 
     update() {
@@ -20,25 +29,22 @@ class GameController extends ScriptTypeBase implements ScriptType {
 
     onInput(text: string) {
         // Parse string
-        const parsedText = nlp(text).terms().data().map((term: any) => {
-            if (term.bestTag === 'Verb' || term.bestTag === 'Noun')
-                return term.normal;
+        const parsedText = nlp(text).terms().data().map((term: any) => {            
+            return term.normal;
         });
 
-        const output = this.currentRoom.processInput();
-        
-        /*
-        ((terms: string[]) => {
-            if (terms.includes('like') && terms.includes('butts'))
-                return 'And let me guess... you cannot lie?'
+        const output = this.currentRoom.processInput(parsedText);
+        if (output.moveTo) { 
+            const nextRoom = this.rooms.find(room => room.roomName === output.moveTo);
+            if (!nextRoom) 
+                return this.app.fire('gameController:textOutput', 'No such room name');         
             
-            if (terms.includes('sex'))
-                return 'Oh you dirty bird you.'
-            
-            return 'I am sorry but I did not understand your request.'
-        })(parsedText);
-        */
-        this.app.fire('gameController:textOutput', output)
+            this.currentRoom = nextRoom;
+            return this.app.fire('gameController:textOutput', this.currentRoom.arrive);
+        }
+       
+        this.app.fire('gameController:textOutput', output.text)
+                    
 
 
     }
