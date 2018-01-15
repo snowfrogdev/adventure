@@ -11,4 +11,6 @@
 /**********************************************/
 /* Your code                                  */
 /**********************************************/
-import './example';
+import './game-controller';
+import './terminal';
+import './command-line';

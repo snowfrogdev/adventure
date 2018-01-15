@@ -1,7 +1,7 @@
 {
-    "name": "typescript-playcanvas-template",
+    "name": "text-adventure-game",
     "version": "1.0.0",
-    "description": "A template for running Typescript with PlayCanvas Editor",
+    "description": "A text adventure game",
     "main": "index.js",
     "scripts": {
         "start": "cross-env NODE_ENV=development webpack --config webpack.config.js && cross-env UPLOAD=no NODE_ENV=development webpack-dev-server --config webpack.config.js --port 8081 --inline --hot",
@@ -34,5 +34,7 @@
         "webpack": "^3.10.0",
         "webpack-dev-server": "^2.9.7"
     },
-    "dependencies": {}
+    "dependencies": {
+        "compromise": "^11.2.2"
+    }
 }
