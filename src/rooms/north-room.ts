@@ -1,17 +1,43 @@
-import { TermNode, Room } from "../room";
+import { Room, Output } from "../room";
+import { GameState } from "../game-controller";
 
-const arriveTerm = new TermNode(['arrive']);
-arriveTerm.text = 'You are in the North room. You can go East, South or West';
+export class NorthRoom extends Room {
+    roomName = 'northRoom';
 
-const southTerm = new TermNode(['south']);
-southTerm.moveTo = 'centerRoom'; 
+    roomState = {
+        
+    }
 
-const walkTerm = new TermNode(['walk', 'go']);
-walkTerm.next = [southTerm];
+    processInput(terms: string[], gameState: GameState): Output {
+        let output: Output = {
+            text: '',
+            moveTo: '',
+            inventory: {
+                add: [],
+                remove: []
+            }
+        }
 
-export const northRoom = new Room({
-    roomName: 'northRoom',  
-    data: [
-        arriveTerm, walkTerm
-    ]
-});
+        // LOOK
+        if (terms.includes('look')) {
+            if (terms.includes('around')) {                
+                output.text = 'You stand by the doorway, the darkness preventing you from going deeper in the room.\n' +
+                    'To the South, you seem the empty room with the box, where you just came from.';
+                return output;
+            }
+            
+            output.text = `Sorry, you can't look at that.`;
+            return output;
+        }        
+
+        // WALK
+        if (terms.includes('walk')) {
+            if (terms.includes('south')) {
+                output.moveTo = 'centerRoom';
+                return output;
+            }
+        }
+
+        return super.processInput(terms, gameState);
+    }
+}

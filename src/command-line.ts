@@ -53,7 +53,10 @@ class CommandLine extends ScriptTypeBase implements ScriptType {
             event.key === 92  ||                    // RIGHT_WINDOWS
             event.key === 144 ||                    // NUM_LOCK
             event.key === 145 ||                    // SCROLL_LOCK
-            event.key === 19                        // PAUSE_BREAK
+            event.key === 19  ||                    // PAUSE_BREAK
+            event.key === 173 ||                    // MUTE_VOLUME
+            event.key === 174 ||                    // DECREASE_VOLUME
+            event.key === 175                       // INCREASE_VOLUME
         )
             return      
         if(event.key === pc.KEY_BACKSPACE || event.key === pc.KEY_DELETE) {
