@@ -1,13 +1,6 @@
 import { Room } from "../room";
-import { CenterRoom } from "./center-room";
-import { NorthRoom } from "./north-room";
+import { centerRoom } from "./center-room";
 
-const roomConstructors = [
-    CenterRoom, NorthRoom
+export const rooms = [
+    centerRoom
 ]
-
-function roomFactory(roomCtrs: Array<new () => Room>) {
-    return roomCtrs.map(roomConst => new roomConst());
-}
-
-export const rooms = roomFactory(roomConstructors);

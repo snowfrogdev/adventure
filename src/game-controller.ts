@@ -44,7 +44,7 @@ class GameController extends ScriptTypeBase implements ScriptType {
         const output = this.gameState.currentRoom.processInput(parsedText, this.gameState);
 
         if (output.moveTo) {
-            const nextRoom = this.rooms.find(room => room.roomName === output.moveTo);
+            const nextRoom = this.rooms.find(room => room.name === output.moveTo);
             if (!nextRoom)
                 return this.app.fire('gameController:textOutput', 'No such room name');
 
