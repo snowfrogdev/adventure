@@ -1,5 +1,5 @@
 import { Room } from "../room";
-import { Door } from "../data-interfaces";
+import { Door, Item } from "../data-interfaces";
 
 export const centerRoom = new Room({
     name: 'center room',
@@ -36,13 +36,37 @@ export const centerRoom = new Room({
             isOpened: false
         }),
         new Door({
-            name: 'west room',
+            name: 'west',
             description: function() {
                 return `This door is currently ${this.isLocked ? 'locked' : 'unlocked'} and ${this.isOpened ? 'opened' : 'closed'}.`
             },
-            destination: 'north room',
+            destination: 'west room',
             isLocked: true,
             isOpened: false
+        })
+    ],
+    items: [
+        new Item({
+            name: 'box',
+            description: function() {
+                if (this.isOpened && this.items[0])
+                    return 'It is a plain wooden box with a lid. Inside, you see a small metal key.';
+                else
+                    return 'It is a plain wooden box with a lid.'
+            },
+            canBePickedUp: false,
+            isContainer: true,
+            isLocked: false,
+            isOpened: false,
+            items: [
+                new Item({
+                    name: 'small metal key',
+                    description: function() {
+                        return "It is a small metal key with the letter 'N' engraved on it's face.";
+                    },
+                    canBePickedUp: true
+                })
+            ]
         })
     ]
 })

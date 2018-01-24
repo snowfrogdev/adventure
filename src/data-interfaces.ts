@@ -8,7 +8,7 @@ export class Door implements Lookable {
     public description: (this: Door) => string; 
     public isLocked: boolean;
     public isOpened: boolean;
-    private destination: string
+    public destination: string;
 
     constructor(obj: {
         name: string; 
@@ -28,11 +28,11 @@ export class Door implements Lookable {
 export class Item implements Lookable {
     public name: string; 
     public description: (this: Item) => string;
-    private canBePickedUp: boolean;
-    private isContainer: boolean;
-    private isLocked: boolean;
-    private isOpened: boolean;
-    private items: Item[];
+    public canBePickedUp: boolean;
+    public isContainer: boolean;
+    public isLocked: boolean;
+    public isOpened: boolean;
+    public items: Item[];
 
     constructor(obj: {
         name: string;

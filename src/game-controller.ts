@@ -1,6 +1,7 @@
 import { createScript, ScriptTypeBase } from "../lib/create-script-decorator";
 import { Room } from "./room";
 import { rooms } from "./rooms/rooms";
+import { Item } from "./data-interfaces";
 
 const nlp = require('compromise');
 
@@ -75,5 +76,5 @@ class GameController extends ScriptTypeBase implements ScriptType {
 
 export interface GameState {
     currentRoom: Room;
-    inventory: string[];
+    inventory: Item[];
 }
