@@ -60,7 +60,7 @@ export const centerRoom = new Room({
             isOpened: false,
             items: [
                 new Item({
-                    name: 'small metal key',
+                    name: 'key',
                     description: function() {
                         return "It is a small metal key with the letter 'N' engraved on it's face.";
                     },

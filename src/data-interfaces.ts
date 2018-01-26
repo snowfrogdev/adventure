@@ -32,6 +32,7 @@ export class Item implements Lookable {
     public isContainer: boolean;
     public isLocked: boolean;
     public isOpened: boolean;
+    public container: Item;
     public items: Item[];
 
     constructor(obj: {

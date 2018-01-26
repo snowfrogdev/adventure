@@ -38,9 +38,9 @@ export class Room {
                 if (terms.includes('around')) {
                     output.text = this.description();
                     return output;
-                }    
+                }
                 if (terms.includes('door')) {
-                    for(const door of this.doors) {
+                    for (const door of this.doors) {
                         if (terms.includes(door.name)) {
                             output.text = door.description();
                             return output;
@@ -54,6 +54,14 @@ export class Room {
                         output.text = item.description();
                         return output;
                     }
+                    if (item.isContainer && item.isOpened) {
+                        for (const containedItem of item.items) {
+                            if (terms.includes(containedItem.name)) {
+                                output.text = containedItem.description();
+                                return output;
+                            }
+                        }
+                    }
                 }
                 for (const item of gameState.inventory) {
                     if (terms.includes(item.name)) {
@@ -62,9 +70,9 @@ export class Room {
                     }
                 }
                 output.text = `Sorry, you can't look at that.`
-                return output;            
+                return output;
             }
-        }        
+        }
 
         // WALK
         const walkVerbs = ['walk', 'go', 'run', 'step'];
@@ -72,23 +80,23 @@ export class Room {
             if (terms.includes(verb)) {
                 for (const door of this.doors) {
                     if (terms.includes(door.name)) {
-                        if(!door.isLocked && door.isOpened) {
+                        if (!door.isLocked && door.isOpened) {
                             output.moveTo = door.destination;
                             return output;
                         }
                         output.text = door.description();
                         return output;
-                    }                    
+                    }
                 }
                 output.text = `Sorry, you can't ${verb} there.`
-                return output;                
+                return output;
             }
         }
-        
+
         // OPEN
         const openVerbs = ['open'];
         for (const verb of openVerbs) {
-            if(terms.includes(verb)) {
+            if (terms.includes(verb)) {
                 for (const door of this.doors) {
                     if (terms.includes(door.name)) {
                         if (!door.isLocked) {
@@ -96,13 +104,13 @@ export class Room {
                                 door.isOpened = true;
                                 output.text = 'You open the door.';
                                 return output;
-                            }                 
-                            output.text =  'The door is already opened.';
-                            return output;          
+                            }
+                            output.text = 'The door is already opened.';
+                            return output;
                         }
                         output.text = 'The door is locked.';
                         return output;
-                    }                
+                    }
                 }
                 for (const item of this.items) {
                     if (terms.includes(item.name)) {
@@ -118,7 +126,7 @@ export class Room {
                             }
                             output.text = `The ${item.name} is locked.`;
                             return output;
-                        }                        
+                        }
                     }
                 }
                 for (const item of gameState.inventory) {
@@ -135,7 +143,7 @@ export class Room {
                             }
                             output.text = `The ${item.name} is locked.`;
                             return output;
-                        }         
+                        }
                     }
                 }
             }
@@ -148,21 +156,37 @@ export class Room {
                 for (const item of this.items) {
                     if (terms.includes(item.name)) {
                         if (item.canBePickedUp) {
-                            // TODO: Recursively look through items. If item is in a container, 
-                            // do not allow it to be taken unless the container is unlocked and opened.
-                        }                        
+                            output.text = `You take the ${item.name}.`
+                            output.inventory.add = [item];
+                            return output;
+                        }
+                        output.text = `Sorry, you can't take this item.`
+                    }
+                    if (item.isContainer && item.isOpened) {
+                        for (const containedItem of item.items) {
+                            if (terms.includes(containedItem.name)) {
+                                if (containedItem.canBePickedUp) {
+                                    output.text = `You take the ${containedItem.name}.`;
+                                    output.inventory.add = [containedItem];
+                                    return output;
+                                }
+                                output.text = `Sorry, you can't take this item.`;
+                                return output;
+                            }
+                        }
                     }
                 }
             }
         }
 
+        // UNLOCK
 
         // INVENTORY
         if (terms.includes('inventory')) {
             const inventory = gameState.inventory.reduce((acc, item) => {
                 return acc + '\n' + '- ' + item.name;
             }, '')
-            output.text = 'Inventory:\n' + inventory; 
+            output.text = 'Inventory:\n' + inventory;
             return output;
         }
 
