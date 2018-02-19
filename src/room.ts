@@ -2,12 +2,10 @@ import { GameState } from "./game-controller";
 import { Door, Lookable, Item } from "./data-interfaces";
 
 export class Room {
-    public name: string;
+    readonly name: string;
     private description: (this: Room) => string;
-    private doors: Door[];
-    private items: Item[];
-
-    private lookables: Lookable[];
+    readonly doors: Door[];
+    readonly items: Item[];
 
     constructor(obj: {
         name: string;
@@ -32,10 +30,10 @@ export class Room {
         }
 
         // LOOK
-        const lookVerbs = ['look', 'examine'];
+        const lookVerbs = ['look', 'examine', 'read'];
         for (const verb of lookVerbs) {
             if (terms.includes(verb)) {
-                if (terms.includes('around')) {
+                if (terms.includes('around') || terms.includes('room')) {
                     output.text = this.description();
                     return output;
                 }
@@ -157,10 +155,12 @@ export class Room {
                     if (terms.includes(item.name)) {
                         if (item.canBePickedUp) {
                             output.text = `You take the ${item.name}.`
+                            item.pickedUp = true;
                             output.inventory.add = [item];
                             return output;
                         }
                         output.text = `Sorry, you can't take this item.`
+                        return output;
                     }
                     if (item.isContainer && item.isOpened) {
                         for (const containedItem of item.items) {
@@ -176,6 +176,8 @@ export class Room {
                         }
                     }
                 }
+                output.text = `Sorry, you can't take this.`
+                return output;
             }
         }
 

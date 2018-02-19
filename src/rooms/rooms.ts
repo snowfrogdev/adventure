@@ -1,8 +1,9 @@
 import { Room } from "../room";
-import { centerRoom } from "./center-room";
-import { northRoom } from "./north-room";
+import { myRoom } from "./my-room";
+import { corridor } from "./corridor";
+
 
 export const rooms = [
-    centerRoom,
-    northRoom
+    myRoom,
+    corridor
 ]

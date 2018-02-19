@@ -29,10 +29,11 @@ export class Item implements Lookable {
     public name: string; 
     public description: (this: Item) => string;
     public canBePickedUp: boolean;
+    public pickedUp: boolean;
     public isContainer: boolean;
     public isLocked: boolean;
     public isOpened: boolean;
-    public container: Item;
+    public container: Item | undefined;
     public items: Item[];
 
     constructor(obj: {
@@ -42,14 +43,17 @@ export class Item implements Lookable {
         isContainer?: boolean;
         isLocked?: boolean;
         isOpened?: boolean;
+        container?: Item;
         items?: Item[];
     }) {
         this.name = obj.name;
         this.description = obj.description;
         this.canBePickedUp = obj.canBePickedUp || false;
+        this.pickedUp = false;
         this.isContainer = obj.isContainer || false;
         this.isLocked = obj.isLocked || false;
         this.isOpened = obj.isOpened || false;
+        this.container = obj.container || undefined;
         this.items = obj.items || [];
     }
 
