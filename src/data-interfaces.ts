@@ -28,6 +28,7 @@ export class Door implements Lookable {
 export class Item implements Lookable {
     public name: string; 
     public description: (this: Item) => string;
+    public dialog: (this: Item) => string;
     public canBePickedUp: boolean;
     public pickedUp: boolean;
     public isContainer: boolean;
@@ -39,6 +40,7 @@ export class Item implements Lookable {
     constructor(obj: {
         name: string;
         description: (this: Item) => string;
+        dialog?: (this: Item) => string;
         canBePickedUp?: boolean;
         isContainer?: boolean;
         isLocked?: boolean;
@@ -48,6 +50,7 @@ export class Item implements Lookable {
     }) {
         this.name = obj.name;
         this.description = obj.description;
+        this.dialog = obj.dialog || function() { return "You can't talk to that." };
         this.canBePickedUp = obj.canBePickedUp || false;
         this.pickedUp = false;
         this.isContainer = obj.isContainer || false;

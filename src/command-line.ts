@@ -3,8 +3,7 @@ import { createScript, ScriptTypeBase } from "../lib/create-script-decorator";
 @createScript()
 class CommandLine extends ScriptTypeBase implements ScriptType {
     name = 'commandLine';
-    textInput: string = '';
-    inputBuffer: string[];
+    textInput: string = '';    
     timer = 0;
 
     initialize() {
@@ -56,7 +55,8 @@ class CommandLine extends ScriptTypeBase implements ScriptType {
             event.key === 19  ||                    // PAUSE_BREAK
             event.key === 173 ||                    // MUTE_VOLUME
             event.key === 174 ||                    // DECREASE_VOLUME
-            event.key === 175                       // INCREASE_VOLUME
+            event.key === 175 ||                    // INCREASE_VOLUME
+            event.key === 191                       // FORWARD SLASH OR Ç
         )
             return      
         if(event.key === pc.KEY_BACKSPACE || event.key === pc.KEY_DELETE) {

@@ -19,7 +19,7 @@ class Terminal extends ScriptTypeBase implements ScriptType {
         const processString = async (string: string) => {            
             for (let char of string) {     
                 this.text += char  ;         
-                await waitForSeconds(0.02);
+                await waitForSeconds(0.01);
             }
         }
         processString(text);      

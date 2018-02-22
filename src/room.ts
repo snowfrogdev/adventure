@@ -47,6 +47,16 @@ export class Room {
                     output.text = "Sorry, I don't know which door you are talking about."
                     return output;
                 }
+                if (terms.includes('stairs')) {
+                    for (const door of this.doors) {
+                        if (door.name === 'up' || door.name === 'down') {
+                            output.text = door.description();
+                            return output;
+                        }
+                    }
+                    output.text = "Sorry, I don't know which stairs you are talking about."
+                    return output;
+                }
                 for (const item of this.items) {
                     if (terms.includes(item.name)) {
                         output.text = item.description();
@@ -86,7 +96,8 @@ export class Room {
                         return output;
                     }
                 }
-                output.text = `Sorry, you can't ${verb} there.`
+                output.text = "Sorry, I'm not sure where you are trying to go. \n" +
+                "Try using directions like: 'walk north'.";
                 return output;
             }
         }
@@ -95,20 +106,25 @@ export class Room {
         const openVerbs = ['open'];
         for (const verb of openVerbs) {
             if (terms.includes(verb)) {
-                for (const door of this.doors) {
-                    if (terms.includes(door.name)) {
-                        if (!door.isLocked) {
-                            if (!door.isOpened) {
-                                door.isOpened = true;
-                                output.text = 'You open the door.';
+                if (terms.includes('door')) {
+                    for (const door of this.doors) {
+                        if (terms.includes(door.name)) {
+                            if (!door.isLocked) {
+                                if (!door.isOpened) {
+                                    door.isOpened = true;
+                                    output.text = 'You open the door.';
+                                    return output;
+                                }
+                                output.text = 'The door is already opened.';
                                 return output;
                             }
-                            output.text = 'The door is already opened.';
+                            output.text = 'The door is locked.';
                             return output;
-                        }
-                        output.text = 'The door is locked.';
-                        return output;
+                        }                        
                     }
+                    output.text = "I don't know which door you are talking about. \n" +
+                        "Try being more specific, like this: 'open north door'";
+                        return output;
                 }
                 for (const item of this.items) {
                     if (terms.includes(item.name)) {
@@ -181,6 +197,21 @@ export class Room {
             }
         }
 
+        // TALK
+        const talkVerbs = ['talk', 'speak', 'converse', 'ask', 'tell'];
+        for (const verb of talkVerbs) {
+            if (terms.includes(verb)) {
+                for (const item of this.items) {
+                    if (terms.includes(item.name)) {                        
+                        output.text = item.dialog();
+                        return output;
+                    }                    
+                }
+                output.text = `Sorry, you can't talk to that.`
+                return output;
+            }
+        }
+
         // UNLOCK
 
         // INVENTORY
@@ -192,7 +223,9 @@ export class Room {
             return output;
         }
 
-        output.text = `Sorry, I don't understand.`
+        output.text = "Sorry, I don't understand. \n" +
+        "Try using one of these verbs: walk, talk, open, use, look. \n" +
+        "To look at your inventory your can simply type: inventory.";
         return output
     }
 }
