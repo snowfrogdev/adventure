@@ -20,7 +20,7 @@ export const lobby = new Room({
             description: function() {
                 return `This door is currently ${this.isLocked ? 'locked' : 'unlocked'} and ${this.isOpened ? 'opened' : 'closed'}.`
             },
-            destination: 'townsquare',
+            destination: 'town square',
             isLocked: false,
             isOpened: false
         }),
@@ -39,7 +39,7 @@ export const lobby = new Room({
         new Item({
             name: 'bell',
             description: function() {
-                return "A small handheld bell";
+                return "A small handheld bell.";
             },
             canBePickedUp: true,
             isContainer: false,

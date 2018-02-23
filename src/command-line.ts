@@ -61,13 +61,20 @@ class CommandLine extends ScriptTypeBase implements ScriptType {
             return      
         if(event.key === pc.KEY_BACKSPACE || event.key === pc.KEY_DELETE) {
             this.textInput = this.textInput.slice(0, -1);
+            this.playTypingSound();
             return;
         }
         if(event.key === pc.KEY_ENTER) {
             this.app.fire('textInput:enter', this.textInput);
             this.textInput = '';
+            this.playTypingSound();
             return;
         }
         this.textInput += event.event.key;
+        this.playTypingSound();
+    }
+
+    playTypingSound() {
+        this.entity.sound.play('typing');
     }
 }

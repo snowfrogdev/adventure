@@ -225,7 +225,7 @@ export class Room {
 
         output.text = "Sorry, I don't understand. \n" +
         "Try using one of these verbs: walk, talk, open, use, look. \n" +
-        "To look at your inventory your can simply type: inventory.";
+        "To look at your inventory you can simply type: inventory.";
         return output
     }
 }
