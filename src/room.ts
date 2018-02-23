@@ -22,6 +22,7 @@ export class Room {
     processInput(terms: string[], gameState: GameState): Output {
         let output: Output = {
             text: '',
+            sound: '',
             moveTo: '',
             inventory: {
                 add: [],
@@ -113,6 +114,7 @@ export class Room {
                                 if (!door.isOpened) {
                                     door.isOpened = true;
                                     output.text = 'You open the door.';
+                                    output.sound = 'openDoor';
                                     return output;
                                 }
                                 output.text = 'The door is already opened.';
@@ -232,6 +234,7 @@ export class Room {
 
 export interface Output {
     text: string;
+    sound: string;
     moveTo: string;
     inventory: {
         add: Item[];

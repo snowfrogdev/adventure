@@ -75,6 +75,7 @@ class CommandLine extends ScriptTypeBase implements ScriptType {
     }
 
     playTypingSound() {
+        //this.entity.sound.pitch = pc.math.random(0.99, 1.01);
         this.entity.sound.play('typing');
     }
 }

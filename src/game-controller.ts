@@ -2,6 +2,7 @@ import { createScript, ScriptTypeBase } from "../lib/create-script-decorator";
 import { Room } from "./room";
 import { rooms } from "./rooms/rooms";
 import { Item } from "./data-interfaces";
+import { waitForSeconds } from "../lib/utility";
 
 const nlp = require('compromise');
 
@@ -42,7 +43,7 @@ class GameController extends ScriptTypeBase implements ScriptType {
             return term.normal;
         });
 
-        const output = this.gameState.currentRoom.processInput(parsedText, this.gameState);
+        const output = this.gameState.currentRoom.processInput(parsedText, this.gameState);        
 
         if (output.moveTo) {
             const nextRoom = this.rooms.find(room => room.name === output.moveTo);
@@ -68,6 +69,14 @@ class GameController extends ScriptTypeBase implements ScriptType {
         }
 
         this.app.fire('gameController:textOutput', output.text)
+
+        if (output.sound) {
+            waitForSeconds(0.5)
+            .then(() => {
+                this.entity.sound.play(output.sound);
+            });
+            
+        }
 
 
 
