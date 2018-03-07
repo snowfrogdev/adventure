@@ -54,6 +54,12 @@ class GameController extends ScriptTypeBase implements ScriptType {
                 return this.app.fire('gameController:textOutput', 'No such room name');
 
             this.gameState.currentRoom = nextRoom;
+            if (output.sound) {
+                waitForSeconds(0.5)
+                .then(() => {
+                    this.entity.sound.play(output.sound);
+                });            
+            }
             return this.app.fire(
                 'gameController:textOutput',
                 this.gameState.currentRoom.processInput(['look', 'around'], this.gameState).text
@@ -77,8 +83,7 @@ class GameController extends ScriptTypeBase implements ScriptType {
             waitForSeconds(0.5)
             .then(() => {
                 this.entity.sound.play(output.sound);
-            });
-            
+            });            
         }
 
 

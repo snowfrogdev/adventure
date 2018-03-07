@@ -91,6 +91,7 @@ export class Room {
                     if (terms.includes(door.name)) {
                         if (!door.isLocked && door.isOpened) {
                             output.moveTo = door.destination;
+                            output.sound = 'walking';
                             return output;
                         }
                         output.text = door.description(gameState);
