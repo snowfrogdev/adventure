@@ -1,5 +1,6 @@
 import { Room } from "../room";
 import { Door, Item } from "../data-interfaces";
+import { GameState } from "../game-controller";
 
 export const lobby = new Room({
     name: 'lobby',
@@ -40,6 +41,14 @@ export const lobby = new Room({
             name: 'bell',
             description: function() {
                 return "A small handheld bell.";
+            },
+            use: function(gameState: GameState) {
+                if(!gameState.flags.rangBellInSchool && gameState.currentRoom.name === 'school') {
+                    gameState.flags.rangBellInSchool = true;
+                    return "You ring the bell. Before Mrs. Kanmore can say anything, \n" + 
+                    "the students quickly get up and get out of the classroom for recess."
+                }
+                return "You ring the bell and nothing happens."
             },
             canBePickedUp: true,
             isContainer: false,

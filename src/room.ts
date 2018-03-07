@@ -3,13 +3,13 @@ import { Door, Lookable, Item } from "./data-interfaces";
 
 export class Room {
     readonly name: string;
-    private description: (this: Room) => string;
+    private description: (this: Room, gameState: GameState) => string;
     readonly doors: Door[];
     readonly items: Item[];
 
     constructor(obj: {
         name: string;
-        description: (this: Room) => string;
+        description: (this: Room, gameState: GameState) => string;
         doors: Door[];
         items: Item[];
     }) {
@@ -34,14 +34,14 @@ export class Room {
         const lookVerbs = ['look', 'examine', 'read'];
         for (const verb of lookVerbs) {
             if (terms.includes(verb)) {
-                if (terms.includes('around') || terms.includes('room')) {
-                    output.text = this.description();
+                if (terms.includes('around') || terms.includes('room') || terms.includes(this.name)) {
+                    output.text = this.description(gameState);
                     return output;
                 }
                 if (terms.includes('door')) {
                     for (const door of this.doors) {
                         if (terms.includes(door.name)) {
-                            output.text = door.description();
+                            output.text = door.description(gameState);
                             return output;
                         }
                     }
@@ -51,7 +51,7 @@ export class Room {
                 if (terms.includes('stairs')) {
                     for (const door of this.doors) {
                         if (door.name === 'up' || door.name === 'down') {
-                            output.text = door.description();
+                            output.text = door.description(gameState);
                             return output;
                         }
                     }
@@ -60,13 +60,13 @@ export class Room {
                 }
                 for (const item of this.items) {
                     if (terms.includes(item.name)) {
-                        output.text = item.description();
+                        output.text = item.description(gameState);
                         return output;
                     }
                     if (item.isContainer && item.isOpened) {
                         for (const containedItem of item.items) {
                             if (terms.includes(containedItem.name)) {
-                                output.text = containedItem.description();
+                                output.text = containedItem.description(gameState);
                                 return output;
                             }
                         }
@@ -74,7 +74,7 @@ export class Room {
                 }
                 for (const item of gameState.inventory) {
                     if (terms.includes(item.name)) {
-                        output.text = item.description();
+                        output.text = item.description(gameState);
                         return output;
                     }
                 }
@@ -93,12 +93,12 @@ export class Room {
                             output.moveTo = door.destination;
                             return output;
                         }
-                        output.text = door.description();
+                        output.text = door.description(gameState);
                         return output;
                     }
                 }
                 output.text = "Sorry, I'm not sure where you are trying to go. \n" +
-                "Try using directions like: 'walk north'.";
+                "Try using one of these directions: north, east, south, west, up, down.";
                 return output;
             }
         }
@@ -205,7 +205,12 @@ export class Room {
             if (terms.includes(verb)) {
                 for (const item of this.items) {
                     if (terms.includes(item.name)) {                        
-                        output.text = item.dialog();
+                        output.text = item.dialog(gameState);
+                        // Checks a flag to see if character gives player an item
+                        if(item.giveItem) {
+                            output.inventory.add = [item.items[0]];
+                            item.giveItem = false;
+                        }                        
                         return output;
                     }                    
                 }
@@ -215,6 +220,22 @@ export class Room {
         }
 
         // UNLOCK
+
+        // USE
+        const useVerbs = ['use'];
+        for (const verb of useVerbs) {
+            if (terms.includes(verb)) {
+                for (const item of gameState.inventory) {
+                    if (terms.includes(item.name)) {                        
+                        output.text = item.use(gameState);
+                        return output;
+                    }                    
+                }
+                output.text = `Sorry, you can't use that here.`
+                return output;
+            }
+        }
+
 
         // INVENTORY
         if (terms.includes('inventory')) {

@@ -1,18 +1,20 @@
+import { GameState } from "./game-controller";
+
 export interface Lookable {
     name: string;
-    description: () => string;
+    description: (gameState: GameState) => string;
 }
 
 export class Door implements Lookable {
     public name: string; 
-    public description: (this: Door) => string; 
+    public description: (this: Door, gameState: GameState) => string; 
     public isLocked: boolean;
     public isOpened: boolean;
     public destination: string;
 
     constructor(obj: {
         name: string; 
-        description: (this: Door) => string; 
+        description: (this: Door, gameState: GameState) => string; 
         destination: string;
         isLocked?: boolean;
         isOpened?: boolean;
@@ -27,8 +29,11 @@ export class Door implements Lookable {
 
 export class Item implements Lookable {
     public name: string; 
-    public description: (this: Item) => string;
-    public dialog: (this: Item) => string;
+    public description: (this: Item, gameState: GameState) => string;
+    public dialog: (this: Item, gameState: GameState) => string;
+    public dialogLine: number;
+    public giveItem: boolean;
+    public use: (this: Item, gameState: GameState) => string;
     public canBePickedUp: boolean;
     public pickedUp: boolean;
     public isContainer: boolean;
@@ -39,8 +44,9 @@ export class Item implements Lookable {
 
     constructor(obj: {
         name: string;
-        description: (this: Item) => string;
-        dialog?: (this: Item) => string;
+        description: (this: Item, gameState: GameState) => string;
+        dialog?: (this: Item, gameState: GameState) => string;
+        use?: (this: Item, gameState: GameState) => string;
         canBePickedUp?: boolean;
         isContainer?: boolean;
         isLocked?: boolean;
@@ -51,6 +57,9 @@ export class Item implements Lookable {
         this.name = obj.name;
         this.description = obj.description;
         this.dialog = obj.dialog || function() { return "You can't talk to that." };
+        this.dialogLine = 1;
+        this.giveItem = false;
+        this.use = obj.use || function() { return "You can't use that here."};
         this.canBePickedUp = obj.canBePickedUp || false;
         this.pickedUp = false;
         this.isContainer = obj.isContainer || false;
@@ -58,8 +67,5 @@ export class Item implements Lookable {
         this.isOpened = obj.isOpened || false;
         this.container = obj.container || undefined;
         this.items = obj.items || [];
-    }
-
-
-    
+    }    
 }

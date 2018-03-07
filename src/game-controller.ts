@@ -18,7 +18,10 @@ class GameController extends ScriptTypeBase implements ScriptType {
     initialize() {
         this.gameState = {
             currentRoom: rooms[0],
-            inventory: []
+            inventory: [],
+            flags: {
+                rangBellInSchool: false
+            }
         }
 
 
@@ -59,7 +62,7 @@ class GameController extends ScriptTypeBase implements ScriptType {
 
         if (output.inventory.add.length) {
             output.inventory.add.forEach(item => {
-                this.gameState.inventory.push(item)
+                this.gameState.inventory.push(item);
             });
         }
         if (output.inventory.remove.length) {
@@ -86,4 +89,8 @@ class GameController extends ScriptTypeBase implements ScriptType {
 export interface GameState {
     currentRoom: Room;
     inventory: Item[];
+    flags: {
+        rangBellInSchool: boolean;
+
+    }
 }
