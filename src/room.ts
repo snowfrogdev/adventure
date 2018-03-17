@@ -4,8 +4,8 @@ import { Door, Lookable, Item } from "./data-interfaces";
 export class Room {
     readonly name: string;
     private description: (this: Room, gameState: GameState) => string;
-    readonly doors: Door[];
-    readonly items: Item[];
+    public doors: Door[];
+    public items: Item[];
 
     constructor(obj: {
         name: string;
@@ -27,7 +27,8 @@ export class Room {
             inventory: {
                 add: [],
                 remove: []
-            }
+            },
+            restart: false
         }
 
         // LOOK
@@ -79,27 +80,6 @@ export class Room {
                     }
                 }
                 output.text = `Sorry, you can't look at that.`
-                return output;
-            }
-        }
-
-        // WALK
-        const walkVerbs = ['walk', 'go', 'run', 'step'];
-        for (const verb of walkVerbs) {
-            if (terms.includes(verb)) {
-                for (const door of this.doors) {
-                    if (terms.includes(door.name)) {
-                        if (!door.isLocked && door.isOpened) {
-                            output.moveTo = door.destination;
-                            output.sound = 'walking';
-                            return output;
-                        }
-                        output.text = door.description(gameState);
-                        return output;
-                    }
-                }
-                output.text = "Sorry, I'm not sure where you are trying to go. \n" +
-                "Try using one of these directions: north, east, south, west, up, down.";
                 return output;
             }
         }
@@ -238,7 +218,27 @@ export class Room {
                 return output;
             }
         }
-
+        
+        // WALK
+        const walkVerbs = ['walk', 'go', 'run', 'step'];
+        for (const verb of walkVerbs) {
+            if (terms.includes(verb)) {
+                for (const door of this.doors) {
+                    if (terms.includes(door.name)) {
+                        if (!door.isLocked && door.isOpened) {
+                            output.moveTo = door.destination;
+                            output.sound = 'walking';
+                            return output;
+                        }
+                        output.text = door.description(gameState);
+                        return output;
+                    }
+                }
+                output.text = "Sorry, I'm not sure where you are trying to go. \n" +
+                "Try using one of these directions: north, east, south, west, up, down.";
+                return output;
+            }
+        }
 
         // INVENTORY
         if (terms.includes('inventory')) {
@@ -249,10 +249,24 @@ export class Room {
             return output;
         }
 
+        // SAVE
+        if (terms.includes('save')) {
+            output.text = "This game saves automatically, no need to worry about losing your progress."
+            return output;
+        }        
+
+        // RESTART
+        if (terms.includes('restart')) {
+            output.text = "Restarting Game."
+            output.restart = true;
+            return output;
+        }
+
+        // NO RECOGNIZABLE INPUT - LEAVE AT THE END OF FUNCTION
         output.text = "Sorry, I don't understand. \n" +
         "Try using one of these verbs: walk, talk, open, use, look. \n" +
-        "To look at your inventory you can simply type: inventory.";
-        return output
+        "To look at your inventory you can simply type: inventory."
+        return output;
     }
 }
 
@@ -264,6 +278,7 @@ export interface Output {
         add: Item[];
         remove: Item[];
     };
+    restart: boolean;
 }
 
 

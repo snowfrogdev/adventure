@@ -10,37 +10,37 @@ const nlp = require('compromise');
 class GameController extends ScriptTypeBase implements ScriptType {
     name = 'gameController';
 
-    rooms: Room[] = rooms;
+    rooms: Room[];
     gameState: GameState;
 
 
-
     initialize() {
-        this.gameState = {
-            currentRoom: rooms[0],
-            inventory: [],
-            flags: {
-                rangBellInSchool: false
-            }
-        }
-
+        
+        this.loadGame();
 
         this.app.on('textInput:enter', this.onInput, this);
 
     }
 
     postInitialize() {
+        if (this.gameState.currentRoom.name === 'my room') {
+            return this.app.fire(
+                'gameController:textOutput',
+                this.gameState.currentRoom.processInput(['look', 'around'], this.gameState).text
+            );
+        }
+
         this.app.fire(
             'gameController:textOutput',
-            this.gameState.currentRoom.processInput(['look', 'around'], this.gameState).text
-        );
+            'Welcome Back!\n' + this.gameState.currentRoom.processInput(['look', 'around'], this.gameState).text
+        );        
     }
 
     update() {
 
     }
 
-    onInput(text: string) {
+    onInput(text: string) {        
         // Parse string
         const parsedText = nlp(text).terms().data().map((term: any) => {
             return term.normal;
@@ -60,6 +60,7 @@ class GameController extends ScriptTypeBase implements ScriptType {
                     this.entity.sound.play(output.sound);
                 });            
             }
+            this.saveGame();
             return this.app.fire(
                 'gameController:textOutput',
                 this.gameState.currentRoom.processInput(['look', 'around'], this.gameState).text
@@ -79,15 +80,83 @@ class GameController extends ScriptTypeBase implements ScriptType {
 
         this.app.fire('gameController:textOutput', output.text)
 
+        if (output.restart) {
+            return waitForSeconds(1)
+            .then(() => {
+                this.restart();
+            })
+        }
+
         if (output.sound) {
             waitForSeconds(0.5)
             .then(() => {
                 this.entity.sound.play(output.sound);
             });            
         }
+        this.saveGame();
+    }
 
+    saveGame() {
+        const roomsJSON = JSON.stringify(this.rooms);
+        const gameStateJSON = JSON.stringify(this.gameState);
+        console.log(gameStateJSON);
 
+        localStorage.setItem('rooms', roomsJSON);
+        localStorage.setItem('gameState', gameStateJSON);
+    }
 
+    loadGame() {
+        const roomsJSON = localStorage.getItem('rooms');
+        const gameStateJSON = localStorage.getItem('gameState');
+
+        this.rooms = rooms;
+        this.gameState = {
+            currentRoom: this.rooms[0],
+            inventory: [],
+            flags: {
+                rangBellInSchool: false
+            }
+        }            
+        if (roomsJSON && gameStateJSON) {
+            const deserializedRoomsJSON = JSON.parse(roomsJSON);
+            const deserializedGameStateJSON = JSON.parse(gameStateJSON);
+            for (const savedRoom of deserializedRoomsJSON) {
+                let room = this.rooms.find(room => room.name === savedRoom.name) as Room;
+                for (let i = 0; i < room.doors.length; i++) {
+                    Object.assign(room.doors[i], savedRoom.doors[i]);
+                }
+                for (let i = 0; i < room.items.length; i++) {                    
+                    for (let j = 0; j < room.items[i].items.length; j++) {
+                        Object.assign(room.items[i].items[j], savedRoom.items[i].items[j]);
+                        Object.assign(savedRoom.items[i].items[j], room.items[i].items[j]);
+                    }
+                    Object.assign(room.items[i], savedRoom.items[i]);
+                }
+                
+            }
+            const currentRoom = this.rooms.find(room => room.name === deserializedGameStateJSON.currentRoom.name) as Room;
+            Object.assign(this.gameState, deserializedGameStateJSON);
+            this.gameState.currentRoom = currentRoom;
+            this.gameState.inventory = deserializedGameStateJSON.inventory.map((item: Item) => {
+                for (const room of this.rooms) {
+                    for (const roomItem of room.items) {
+                        if (roomItem.name === item.name)
+                        return roomItem;
+
+                        for (const subItem of roomItem.items) {
+                            if (subItem.name === item.name)
+                            return subItem
+                        }
+                    }
+                }
+            })
+            console.log(this.gameState);
+            console.log(this.rooms);
+        }       
+    }
+    restart() {
+        localStorage.clear();
+        window.location.reload();
     }
 }
 

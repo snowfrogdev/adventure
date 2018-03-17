@@ -45,7 +45,7 @@ export const lobby = new Room({
             use: function(gamestate) {
                 if(!gamestate.flags.rangBellInSchool && gamestate.currentRoom.name === 'school') {
                     gamestate.flags.rangBellInSchool = true;
-                    return "You ring the bell. Before Mrs. Kanmore can say anything, \n" + 
+                    return "You ring the bell. Before Mrs. Canmore can say anything, \n" + 
                     "the students quickly get up and get out of the classroom for recess."
                 }
                 return "You ring the bell and nothing happens."
