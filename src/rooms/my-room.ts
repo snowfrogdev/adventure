@@ -12,8 +12,8 @@ export const myRoom = new Room({
             return "You are standing in your room at the Sortwell's Inn. \n" +
             "The door on the north wall is closed."
         }
-        return "You are standing in your room at the Sortwell's Inn. \n" + 
-        "A newspaper lies on the floor by the door on the north wall.\n" + 
+        return "You are standing in your room at the Sortwell's Inn. " + 
+        "A newspaper lies on the floor by the door on the north wall. " + 
         "Mrs. Sortwell must have slid the newspaper under the door early this morning.";
     },
     doors: [

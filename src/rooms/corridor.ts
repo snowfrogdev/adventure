@@ -3,7 +3,13 @@ import { Door, Item } from "../data-interfaces";
 
 export const corridor = new Room({
     name: 'corridor',
-    description: function() {        
+    description: function(gamestate) {
+        if (!gamestate.currentRoom.doors[1].isLocked ) {
+            return "You are standing in a corridor. \n" + 
+            "On the south wall is the door leading to your room. " + 
+            "On the north wall is the door leading to Anna's room. " +
+            "You also notice a set of stairs leading down to the lobby.";
+        }        
         return "You are standing in a corridor. \n" + 
         "On the south wall is the door leading to your room.\n" + 
         "On the north wall you see another door, no doubt leading to another\n" +

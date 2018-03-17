@@ -173,6 +173,10 @@ export class Room {
                 for (const item of this.items) {
                     if (terms.includes(item.name)) {
                         if (item.canBePickedUp) {
+                            if (item.pickedUp === true) {
+                                output.text = `You already picked up the ${item.name}.`
+                                return output;
+                            }
                             output.text = `You take the ${item.name}.`
                             item.pickedUp = true;
                             output.inventory.add = [item];
@@ -218,9 +222,7 @@ export class Room {
                 output.text = `Sorry, you can't talk to that.`
                 return output;
             }
-        }
-
-        // UNLOCK
+        }       
 
         // USE
         const useVerbs = ['use'];
