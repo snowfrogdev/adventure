@@ -281,7 +281,7 @@ export class Room {
         // NO RECOGNIZABLE INPUT - LEAVE AT THE END OF FUNCTION
         output.text = "Sorry, I don't understand. \n" +
         "Try using one of these verbs: walk, talk, open, use, look. \n" +
-        "To look at your inventory you can simply type: inventory."
+        "To look at your inventory you can simply type: inventory. \n"
         return output;
     }
 }

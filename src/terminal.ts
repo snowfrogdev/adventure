@@ -5,6 +5,7 @@ import { waitForSeconds } from "../lib/utility";
 class Terminal extends ScriptTypeBase implements ScriptType {
     name = 'terminal';
     text: string = '';
+    textBuffer: string = '';
 
     initialize() {
         this.app.on('gameController:textOutput', this.onTextOutput, this)
@@ -15,13 +16,14 @@ class Terminal extends ScriptTypeBase implements ScriptType {
     }
 
     onTextOutput(text: string) {
-        this.text = '';
+        this.text = this.textBuffer + '\n------------------------------\n';
         const processString = async (string: string) => {            
             for (let char of string) {     
                 this.text += char  ;        
                 await waitForSeconds(0.01);
             }
         }
-        processString(text);      
+        processString(text);
+        this.textBuffer = text;     
     }
 }
