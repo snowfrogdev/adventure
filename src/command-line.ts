@@ -3,7 +3,9 @@ import { createScript, ScriptTypeBase } from "../lib/create-script-decorator";
 @createScript()
 class CommandLine extends ScriptTypeBase implements ScriptType {
     name = 'commandLine';
-    textInput: string = '';    
+    textBuffer: string[] = [''];
+    textBufferIndex: number = 0;
+    textInput: string = '';
     timer = 0;
 
     initialize() {
@@ -11,18 +13,18 @@ class CommandLine extends ScriptTypeBase implements ScriptType {
     }
 
     update(dt: number) {
-        this.timer += dt; 
+        this.timer += dt;
         if (this.timer > 1.2)
-            this.timer= 0;
+            this.timer = 0;
         else if (this.timer <= 0.6)
             this.entity.element.text = '>' + this.textInput + '_';
-        else 
+        else
             this.entity.element.text = '>' + this.textInput
     }
 
     onKeyDown(event: pc.KeyboardEvent) {
-        if(
-            event.key === pc.KEY_SHIFT || 
+        if (
+            event.key === pc.KEY_SHIFT ||
             event.key === pc.KEY_CAPS_LOCK ||
             event.key === pc.KEY_ALT ||
             event.key === pc.KEY_CONTROL ||
@@ -48,8 +50,8 @@ class CommandLine extends ScriptTypeBase implements ScriptType {
             event.key === pc.KEY_INSERT ||
             event.key === pc.KEY_LEFT ||
             event.key === pc.KEY_RIGHT ||
-            event.key === 19  ||                    // PAUSE_BREAK
-            event.key === 92  ||                    // RIGHT_WINDOWS
+            event.key === 19 ||                    // PAUSE_BREAK
+            event.key === 92 ||                    // RIGHT_WINDOWS
             event.key === 144 ||                    // NUM_LOCK
             event.key === 145 ||                    // SCROLL_LOCK
             event.key === 160 ||
@@ -58,17 +60,39 @@ class CommandLine extends ScriptTypeBase implements ScriptType {
             event.key === 175 ||                    // INCREASE_VOLUME
             event.key === 191 ||                    // FORWARD SLASH OR Ç
             event.key === 192 ||                    // GRAVE ACCENT
+            event.key === 219 ||    	            // OPEN BRACKET
+            event.key === 221 ||                    // CLOSE BRACKET
             event.key === 223                       // RIGHT_CONTROL
-
-
         )
-            return      
-        if(event.key === pc.KEY_BACKSPACE || event.key === pc.KEY_DELETE) {
+            return
+
+        if (event.key === pc.KEY_UP) {
+            if (this.textBufferIndex > 0) {
+                this.textBufferIndex -= 1;
+                this.textInput = this.textBuffer[this.textBufferIndex];
+            }
+            return;
+        }
+
+        if (event.key === pc.KEY_DOWN) {
+            if (this.textBufferIndex < this.textBuffer.length - 1) {
+                this.textBufferIndex += 1;
+                this.textInput = this.textBuffer[this.textBufferIndex];
+            } else if (this.textBufferIndex === this.textBuffer.length -1) {
+                this.textBufferIndex += 1;
+                this.textInput = '';
+            }                       
+            return;        
+        }
+
+        if (event.key === pc.KEY_BACKSPACE || event.key === pc.KEY_DELETE) {
             this.textInput = this.textInput.slice(0, -1);
             this.playTypingSound();
             return;
         }
-        if(event.key === pc.KEY_ENTER) {
+        if (event.key === pc.KEY_ENTER) {
+            this.textBuffer.push(this.textInput);
+            this.textBufferIndex = this.textBuffer.length;
             this.app.fire('textInput:enter', this.textInput);
             this.textInput = '';
             this.playTypingSound();
