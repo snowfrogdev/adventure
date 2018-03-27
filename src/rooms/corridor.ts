@@ -10,9 +10,9 @@ export const corridor = new Room({
             "On the north wall is the door leading to Anna's room. " +
             "You also notice a set of stairs leading down to the lobby.";
         }        
-        return "You are standing in a corridor. \n" + 
-        "On the south wall is the door leading to your room.\n" + 
-        "On the north wall you see another door, no doubt leading to another\n" +
+        return "You are standing in a corridor. " + 
+        "On the south wall is the door leading to your room. " + 
+        "On the north wall you see another door, no doubt leading to another " +
         "guest's room. You also notice a set of stairs leading down to the lobby.";
     },
     doors: [

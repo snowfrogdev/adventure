@@ -23,6 +23,14 @@ class GameController extends ScriptTypeBase implements ScriptType {
     }
 
     postInitialize() {
+        // Play room ambient sounds
+        if (this.gameState.currentRoom.ambientSounds) {
+            waitForSeconds(0.5)
+            .then(() => {
+                (<string[]>this.gameState.currentRoom.ambientSounds).forEach(sound => this.entity.sound.play(sound));
+            })
+        }          
+
         if (this.gameState.currentRoom.name === 'my room') {
             return this.app.fire(
                 'gameController:textOutput',
@@ -33,7 +41,7 @@ class GameController extends ScriptTypeBase implements ScriptType {
         this.app.fire(
             'gameController:textOutput',
             'Welcome Back!\n' + this.gameState.currentRoom.processInput(['look', 'around'], this.gameState).text
-        );        
+        ); 
     }
 
     update() {
@@ -53,13 +61,31 @@ class GameController extends ScriptTypeBase implements ScriptType {
             if (!nextRoom)
                 return this.app.fire('gameController:textOutput', 'No such room name');
 
+
+            // Stop current room ambient sounds
+            if (this.gameState.currentRoom.ambientSounds)
+            this.gameState.currentRoom.ambientSounds.forEach(sound => this.entity.sound.stop(sound));
+            
+            // Change room
             this.gameState.currentRoom = nextRoom;
+
+            // Play output sound (walking)
             if (output.sound) {
                 waitForSeconds(0.5)
                 .then(() => {
                     this.entity.sound.play(output.sound);
+                    
                 });            
             }
+
+            // Play new room ambient sounds
+            if (this.gameState.currentRoom.ambientSounds) {
+                waitForSeconds(0.5)
+                .then(() => {
+                    (<string[]>this.gameState.currentRoom.ambientSounds).forEach(sound => this.entity.sound.play(sound));
+                })
+            }          
+
             this.saveGame();
             return this.app.fire(
                 'gameController:textOutput',
@@ -114,7 +140,8 @@ class GameController extends ScriptTypeBase implements ScriptType {
             currentRoom: this.rooms[0],
             inventory: [],
             flags: {
-                rangBellInSchool: false
+                rangBellInSchool: false,
+                readJournal: false
             }
         }            
         if (roomsJSON && gameStateJSON) {
@@ -165,6 +192,7 @@ export interface GameState {
     inventory: Item[];
     flags: {
         rangBellInSchool: boolean;
+        readJournal: boolean;
 
     }
 }

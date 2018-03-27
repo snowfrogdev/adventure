@@ -6,17 +6,20 @@ export class Room {
     private description: (this: Room, gameState: GameState) => string;
     public doors: Door[];
     public items: Item[];
+    public ambientSounds?: string[];
 
     constructor(obj: {
         name: string;
         description: (this: Room, gameState: GameState) => string;
         doors: Door[];
         items: Item[];
+        ambientSounds?: string[];
     }) {
         this.name = obj.name;
         this.description = obj.description
         this.doors = obj.doors;
         this.items = obj.items;
+        this.ambientSounds = obj.ambientSounds;
     }
 
     processInput(terms: string[], gameState: GameState): Output {
@@ -35,7 +38,7 @@ export class Room {
         const lookVerbs = ['look', 'examine', 'read'];
         for (const verb of lookVerbs) {
             if (terms.includes(verb)) {
-                if (terms.includes('around') || terms.includes('room') || terms.includes(this.name)) {
+                if (terms.includes('around') || terms.includes('room') || terms.includes(this.name) || terms.includes('surroundings')) {
                     output.text = this.description(gameState);
                     return output;
                 }
@@ -79,7 +82,8 @@ export class Room {
                         return output;
                     }
                 }
-                output.text = `Sorry, you can't look at that.`
+                output.text = "You don't see anything special.\n" +
+                "If you'd like to look at your surroundings type: look around."
                 return output;
             }
         }
@@ -211,6 +215,18 @@ export class Room {
                 for (const item of gameState.inventory) {
                     if (terms.includes(item.name)) {                        
                         output.text = item.use(gameState);
+                        if (item.sound)
+                        output.sound = item.sound;
+
+                        return output;
+                    }                    
+                }
+                for (const item of gameState.currentRoom.items) {
+                    if (terms.includes(item.name)) {                        
+                        output.text = item.use(gameState);
+                        if (item.sound)
+                        output.sound = item.sound;
+
                         return output;
                     }                    
                 }

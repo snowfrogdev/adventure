@@ -5,11 +5,11 @@ export const myRoom = new Room({
     name: 'my room',
     description: function() {
         if (this.doors[0].isOpened && this.items[0].pickedUp) {
-            return "You are standing in your room at the Sortwell's Inn. \n" +
+            return "You are standing in your room at the Sortwell's Inn. " +
             "The door on the north wall is open."
         }
         if (this.items[0].pickedUp) {
-            return "You are standing in your room at the Sortwell's Inn. \n" +
+            return "You are standing in your room at the Sortwell's Inn. " +
             "The door on the north wall is closed."
         }
         return "You are standing in your room at the Sortwell's Inn. " + 
@@ -31,8 +31,8 @@ export const myRoom = new Room({
         new Item({
             name: 'newspaper',
             description: function() {
-                return "A Wiscasset town newspaper dated April 16th, 1908. \n" + 
-                "A main article talks about the recent disapearances of a young boy and \n" + 
+                return "A Wiscasset town newspaper dated April 16th, 1908. " + 
+                "A main article talks about the recent disapearances of a young boy and " + 
                 "an elderly man, both from Wiscasset, but no mention of your niece, Anna.";
             },
             canBePickedUp: true,

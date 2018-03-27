@@ -39,6 +39,7 @@ export class Item implements Lookable {
     public isContainer: boolean;
     public isLocked: boolean;
     public isOpened: boolean;
+    public sound: string | undefined;
     public container: Item | undefined;
     public items: Item[];
 
@@ -51,6 +52,7 @@ export class Item implements Lookable {
         isContainer?: boolean;
         isLocked?: boolean;
         isOpened?: boolean;
+        sound?: string;
         container?: Item;
         items?: Item[];
     }) {
@@ -65,6 +67,7 @@ export class Item implements Lookable {
         this.isContainer = obj.isContainer || false;
         this.isLocked = obj.isLocked || false;
         this.isOpened = obj.isOpened || false;
+        this.sound = obj.sound;
         this.container = obj.container || undefined;
         this.items = obj.items || [];
     }    
