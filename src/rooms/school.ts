@@ -26,7 +26,7 @@ export const school = new Room({
         new Item({
             name: 'canmore',
             description: function(gamestate) {
-                return "Mrs. Canmore is a woman.\n"+
+                return "Mrs. Canmore is a woman. "+
                 "She teaches at the Wisscasset elementary school.";
             },
             dialog: function(gamestate) {

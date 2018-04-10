@@ -25,11 +25,22 @@ class GameController extends ScriptTypeBase implements ScriptType {
     postInitialize() {
         // Play room ambient sounds
         if (this.gameState.currentRoom.ambientSounds) {
+                
+            if(this.gameState.currentRoom.noMusic) {
+                this.entity.sound.pause('music');
+            } else {
+                waitForSeconds(0.5)
+                .then(() => {
+                    this.entity.sound.resume('music');
+                })
+                
+            }
+            
             waitForSeconds(0.5)
             .then(() => {
                 (<string[]>this.gameState.currentRoom.ambientSounds).forEach(sound => this.entity.sound.play(sound));
             })
-        }          
+        }           
 
         if (this.gameState.currentRoom.name === 'my room') {
             return this.app.fire(
@@ -50,6 +61,9 @@ class GameController extends ScriptTypeBase implements ScriptType {
 
     onInput(text: string) {        
         // Parse string
+        if (text === '')
+            return;
+
         const parsedText = nlp(text).terms().data().map((term: any) => {
             return term.normal;
         });
@@ -80,6 +94,17 @@ class GameController extends ScriptTypeBase implements ScriptType {
 
             // Play new room ambient sounds
             if (this.gameState.currentRoom.ambientSounds) {
+                
+                if(this.gameState.currentRoom.noMusic) {
+                    this.entity.sound.pause('music');
+                } else {
+                    waitForSeconds(0.5)
+                    .then(() => {
+                        this.entity.sound.resume('music');
+                    })
+                    
+                }
+                
                 waitForSeconds(0.5)
                 .then(() => {
                     (<string[]>this.gameState.currentRoom.ambientSounds).forEach(sound => this.entity.sound.play(sound));
@@ -125,7 +150,6 @@ class GameController extends ScriptTypeBase implements ScriptType {
     saveGame() {
         const roomsJSON = JSON.stringify(this.rooms);
         const gameStateJSON = JSON.stringify(this.gameState);
-        console.log(gameStateJSON);
 
         localStorage.setItem('rooms', roomsJSON);
         localStorage.setItem('gameState', gameStateJSON);
@@ -176,9 +200,7 @@ class GameController extends ScriptTypeBase implements ScriptType {
                         }
                     }
                 }
-            })
-            console.log(this.gameState);
-            console.log(this.rooms);
+            });
         }       
     }
     restart() {

@@ -36,6 +36,15 @@ export const townSquare = new Room({
             destination: 'orphanage outdoor',
             isLocked: false,
             isOpened: true
+        }),
+        new Door({
+            name: 'east',
+            description: function() {
+                return `This door is currently ${this.isLocked ? 'locked' : 'unlocked'} and ${this.isOpened ? 'opened' : 'closed'}.`
+            },
+            destination: 'church',
+            isLocked: false,
+            isOpened: true
         })
     ],
     items: [ ]

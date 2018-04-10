@@ -4,9 +4,9 @@ import { Door, Item } from "../data-interfaces";
 export const orphanage = new Room({
     name: 'orphanage',
     description: function(gamestate) {                  
-        return "You are standing inside the orphanage. Mrs. Coolidge, the orphanage director, " + 
+        return "You are standing inside the orphanage. Sister Mary, the orphanage director, " + 
         "eyes you with an inquisitive look. A young boy in his early teens is mopping the floor. " + 
-        "To the east is a door leading outside.";
+        "To the east is the main door leading outside.";
     },
     doors: [
         new Door({
@@ -21,13 +21,17 @@ export const orphanage = new Room({
     ],    
     items: [        
         new Item({
-            name: 'coolidge',
+            name: 'mary',
             description: function(gamestate) {
-                return "You see nothing special about Mrs. Coolidge.";
+                return "You see nothing special about Sister Mary.";
             },
-            dialog: function(gamestate) {                
-                return "You ask Mrs. Coolidge about the missing children. She explains that actually 3 children have gone missing in the past 2 years. " +
-                "Nobody makes a fuss about it as they are orphans, poor souls.";           
+            dialog: function(gamestate) {  
+                if (this.dialogLine === 1) {   
+                    this.dialogLine = 0;           
+                    return "You ask Sister Mary about the missing children. She explains that actually 3 children have gone missing in the past 2 years. " +
+                    "Nobody makes a fuss about it as they are orphans, poor souls.";           
+                }
+                return "I'm sorry I can't be of further help. God bless you and have a pleasant day."
                 
             },
             canBePickedUp: false,
@@ -52,6 +56,7 @@ export const orphanage = new Room({
                     "Sometimes adoptive parents come but aside from the local parish priest, they don't get much visitors.";     
                 }
                 if (this.dialogLine === 3) {
+                    this.dialogLine = 0;
                     return "You ask him more about the priest, why does he come by?\n" + 
                     "He tells you about a cellar in the basement that is used by the church. " +
                     "Sometimes there are some boxes from the church that come and go but the cellar is locked under key and only the priest has the key.";     

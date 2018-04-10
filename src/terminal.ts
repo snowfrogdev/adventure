@@ -6,24 +6,39 @@ class Terminal extends ScriptTypeBase implements ScriptType {
     name = 'terminal';
     text: string = '';
     textBuffer: string = '';
+    queue: string[] = [];
+    notProcessingQueue: boolean = true;
 
     initialize() {
-        this.app.on('gameController:textOutput', this.onTextOutput, this)
+        this.app.on('gameController:textOutput', this.onTextOutput, this);
     }
 
     update() {
         this.entity.element.text = this.text;
+        if (this.notProcessingQueue) {
+            this.processQueue(this.queue);
+        }        
     }
 
     onTextOutput(text: string) {
-        this.text = this.textBuffer + '\n------------------------------\n';
-        const processString = async (string: string) => {            
-            for (let char of string) {     
-                this.text += char  ;        
-                await waitForSeconds(0.01);
+        this.queue.push(text);
+    }
+
+    processQueue(queue: string[]) {
+        
+        if (queue.length) {
+            const text = queue.shift() as string;
+            this.text = this.textBuffer + '\n------------------------------\n';
+            const processString = async (string: string) => {
+                this.notProcessingQueue = false;
+                for (let char of string) {
+                    this.text += char;
+                    await waitForSeconds(0.01);
+                }
+                this.notProcessingQueue = true;
             }
-        }
-        processString(text);
-        this.textBuffer = text;     
+            processString(text);
+            this.textBuffer = text;
+        }                
     }
 }

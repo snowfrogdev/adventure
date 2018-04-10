@@ -7,6 +7,7 @@ export class Room {
     public doors: Door[];
     public items: Item[];
     public ambientSounds?: string[];
+    public noMusic?: boolean;
 
     constructor(obj: {
         name: string;
@@ -14,12 +15,14 @@ export class Room {
         doors: Door[];
         items: Item[];
         ambientSounds?: string[];
+        noMusic?: boolean;
     }) {
         this.name = obj.name;
         this.description = obj.description
         this.doors = obj.doors;
         this.items = obj.items;
         this.ambientSounds = obj.ambientSounds;
+        this.noMusic = obj.noMusic;
     }
 
     processInput(terms: string[], gameState: GameState): Output {
@@ -35,7 +38,7 @@ export class Room {
         }
 
         // LOOK
-        const lookVerbs = ['look', 'examine', 'read'];
+        const lookVerbs = ['look', 'examine', 'read', 'check'];
         for (const verb of lookVerbs) {
             if (terms.includes(verb)) {
                 if (terms.includes('around') || terms.includes('room') || terms.includes(this.name) || terms.includes('surroundings')) {
@@ -281,7 +284,9 @@ export class Room {
         // NO RECOGNIZABLE INPUT - LEAVE AT THE END OF FUNCTION
         output.text = "Sorry, I don't understand. \n" +
         "Try using one of these verbs: walk, talk, open, use, look. \n" +
-        "To look at your inventory you can simply type: inventory. \n"
+        "To look at your inventory you can simply type: inventory. \n" +
+        "At anytime, you can type 'look around' to get a description of your current location. \n" +
+        "This game saves your progress automatically, type 'restart' to start the game over";
         return output;
     }
 }

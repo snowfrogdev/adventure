@@ -8,9 +8,9 @@ export const orphanageOutdoor = new Room({
             this.doors[1].isLocked = false;
             this.doors[1].isOpened = true;
         }                
-        return "You are standing in front of a large old building with a sign that reads:  " + 
-        "Wisscasset Orphanage. To the west is the main entrance door. To the north, on the side of the building, " +
-        "is a door that probably leads to a basement cellar.";
+        return "You are standing in front of a large, old, and L-shaped building with a sign that reads:  " + 
+        "Wisscasset Orphanage. On the west wall you see the main entrance door. On the north wall, " +
+        "you see a door that probably leads to a basement cellar.";
     },
     doors: [
         new Door({
@@ -37,6 +37,9 @@ export const orphanageOutdoor = new Room({
         new Door({
             name: 'north',
             description: function(gamestate) {
+                if (this.isLocked) {
+                    return "This door is locked with a combination lock."
+                }
                 return `This door is currently ${this.isLocked ? 'locked' : 'unlocked'} and ${this.isOpened ? 'opened' : 'closed'}.`
             },
             destination: 'cellar',

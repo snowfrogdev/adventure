@@ -30,7 +30,7 @@ export const annaRoom = new Room({
                 gameState.flags.readJournal = true;
                 return "The last entry in Anna's journal reads: \n"+
                 "I feel like I am getting close to discovering something horrible... " +
-                "the disapearing children and Old Sister Coolidge. Something is not quite " +
+                "the disapearance of those children and Old Mrs. Coolidge. Something is not quite " +
                 "right and I'm going to find out what it is. Tomorrow I'm going to investigate " +
                 "the orphanage to see if I can't find out any clues.";
             },

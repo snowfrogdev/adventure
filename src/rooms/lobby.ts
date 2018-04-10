@@ -73,10 +73,10 @@ export const lobby = new Room({
                 }
 
                 if (this.dialogLine === 2) {
-                    return "Hello Mr. Victor, I hope that your search for Anna is going well."
+                    return "Hello Mr. Victor, I hope that your search for Anna is going well. I'm afraid I can't be of any help at the moment."
                 }
 
-                return "Hello Mr. Victor, I hope you're having a pleasant stay."
+                return "Hello Mr. Victor, I hope you're having a pleasant stay. I'm a bit busy at the moment and can't talk."
             },
             canBePickedUp: false,
             isContainer: false,
