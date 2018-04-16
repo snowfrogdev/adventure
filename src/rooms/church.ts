@@ -6,8 +6,10 @@ export const church = new Room({
     ambientSounds: ['church'],
     noMusic: true,
     description: function (gamestate) {
-        return "You are standing in a church. You can see a priest and a choir. On the south wall, " +
-            "you can see a door that leads to an adjacent room.";
+        return "You are standing in a church. There are hundreds of lit candles next to an altar. " +
+            "In one corner you can see a priest and a choir. On the south wall, " +
+            "you can see a door that leads to an adjacent room. " + 
+            "A door on the west wall leads back to the town quare.";
     },
     doors: [
         new Door({
@@ -40,6 +42,16 @@ export const church = new Room({
 
             },
             canBePickedUp: false,
+            isContainer: false,
+            isLocked: false,
+            isOpened: false
+        }),
+        new Item({
+            name: 'candle',
+            description: function (gamestate) {
+                return "It's a lit candle. Very useful in the dark.";
+            },
+            canBePickedUp: true,
             isContainer: false,
             isLocked: false,
             isOpened: false

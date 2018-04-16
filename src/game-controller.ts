@@ -165,7 +165,9 @@ class GameController extends ScriptTypeBase implements ScriptType {
             inventory: [],
             flags: {
                 rangBellInSchool: false,
-                readJournal: false
+                readJournal: false,
+                talkedToOrphan: false,
+                rescuedAnna: false
             }
         }            
         if (roomsJSON && gameStateJSON) {
@@ -215,6 +217,8 @@ export interface GameState {
     flags: {
         rangBellInSchool: boolean;
         readJournal: boolean;
+        talkedToOrphan: boolean;
+        rescuedAnna: boolean;
 
     }
 }

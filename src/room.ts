@@ -282,11 +282,11 @@ export class Room {
         }
 
         // NO RECOGNIZABLE INPUT - LEAVE AT THE END OF FUNCTION
-        output.text = "Sorry, I don't understand. \n" +
+        output.text = "Sorry, I don't understand. \n\n" +
         "Try using one of these verbs: walk, talk, open, use, look. \n" +
         "To look at your inventory you can simply type: inventory. \n" +
-        "At anytime, you can type 'look around' to get a description of your current location. \n" +
-        "This game saves your progress automatically, type 'restart' to start the game over";
+        "At anytime, you can type 'look around' to get a description of your current location. \n\n" +
+        "This game saves your progress automatically, type 'restart' to start the game over.";
         return output;
     }
 }

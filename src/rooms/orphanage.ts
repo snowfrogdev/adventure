@@ -47,7 +47,7 @@ export const orphanage = new Room({
             dialog: function(gamestate) {
                 if (this.dialogLine === 1) {
                     this.dialogLine = 2
-                    return "You ask him if if he knew the missing children. He explains to you that all the orphans " + 
+                    return "You ask him if he knew the missing children. He explains to you that all the orphans " + 
                     "know each other but the missing children were very quiet and all three kept to themselves a lot.";     
                 }
                 if (this.dialogLine === 2) {
@@ -57,11 +57,12 @@ export const orphanage = new Room({
                 }
                 if (this.dialogLine === 3) {
                     this.dialogLine = 0;
+                    gamestate.flags.talkedToOrphan = true;
                     return "You ask him more about the priest, why does he come by?\n" + 
                     "He tells you about a cellar in the basement that is used by the church. " +
-                    "Sometimes there are some boxes from the church that come and go but the cellar is locked under key and only the priest has the key.";     
+                    "Sometimes there are some boxes from the church that come and go but the cellar is locked with a combination lock and only the priest has the combination.";     
                 }  
-                return "Hello mister, I hope than you can find you niece and my missing friends from the orphanage."               
+                return "Hello mister, I hope than you can find your niece and my missing friends from the orphanage."               
                       
                 
             },

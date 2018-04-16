@@ -9,6 +9,8 @@ import { orphanageOutdoor } from "./orphanage-outdoor";
 import { orphanage } from "./orphanage";
 import { church } from "./church";
 import { office } from "./office";
+import { cellar } from "./cellar";
+import { annaCell } from "./anna-cell";
 
 
 export const rooms = [
@@ -21,5 +23,7 @@ export const rooms = [
     orphanageOutdoor,
     orphanage,
     church,
-    office
+    office,
+    cellar,
+    annaCell
 ]

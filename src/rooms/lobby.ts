@@ -76,7 +76,7 @@ export const lobby = new Room({
                     return "Hello Mr. Victor, I hope that your search for Anna is going well. I'm afraid I can't be of any help at the moment."
                 }
 
-                return "Hello Mr. Victor, I hope you're having a pleasant stay. I'm a bit busy at the moment and can't talk."
+                return "Hello Mr. Victor, I hope you're having a pleasant stay. I'm a bit busy at the moment and can't talk. Try me later."
             },
             canBePickedUp: false,
             isContainer: false,
